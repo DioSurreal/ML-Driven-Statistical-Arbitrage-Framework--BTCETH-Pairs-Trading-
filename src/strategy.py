@@ -20,7 +20,6 @@ class PairsStrategy:
         signals['regime'] = regime_series
         signals['signal'] = 0
 
-        # เข้าเทรดเฉพาะในกลุ่มที่ได้รับมอบหมาย
         signals.loc[(signals['z_score'] > self.z_entry) & (
             signals['regime'] == target_regime), 'signal'] = -1
         signals.loc[(signals['z_score'] < -self.z_entry) &

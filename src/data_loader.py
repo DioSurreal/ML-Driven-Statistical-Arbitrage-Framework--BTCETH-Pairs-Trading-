@@ -6,7 +6,6 @@ import os
 class DataHandler:
     def __init__(self, storage_path="data"):
         self.storage_path = storage_path
-        # สร้างโฟลเดอร์ data ถ้ายังไม่มี
         if not os.path.exists(self.storage_path):
             os.makedirs(self.storage_path)
 
@@ -31,11 +30,9 @@ class DataHandler:
                     print(f"⚠️ No data found for {ticker}")
                     continue
 
-                # Normalize columns to a single level to keep CSV schema stable.
                 if isinstance(df.columns, pd.MultiIndex):
                     df.columns = df.columns.get_level_values(0)
 
-                # บันทึกเป็น CSV (โชว์ทักษะการจัดการไฟล์)
                 file_path = os.path.join(self.storage_path, f"{ticker.replace('-', '_')}.csv")
                 df.to_csv(file_path)
                 print(f" Saved {ticker} to {file_path}")

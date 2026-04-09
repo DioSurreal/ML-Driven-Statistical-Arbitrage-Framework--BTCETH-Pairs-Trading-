@@ -8,7 +8,7 @@ class RegimeDetector:
         self.model = GaussianMixture(n_components=n_regimes, random_state=42, n_init=10)
         self.scaler = StandardScaler()
         self.is_fitted = False
-        self.regime_labels = {} # เก็บค่า {0: 'Bear', 1: 'Sideways', 2: 'Bull'}
+        self.regime_labels = {} 
 
     def extract_features(self, df):
         data = df.copy()
@@ -29,10 +29,8 @@ class RegimeDetector:
         temp_df['regime'] = train_preds
         stats = temp_df.groupby('regime').mean()
 
-        # 1. Sideways: กลุ่มที่ความผันผวน (volatility) ต่ำที่สุด
         sideway_idx = stats['volatility'].idxmin()
         
-        # 2. ที่เหลือ: กลุ่มที่ราคาเทียบค่าเฉลี่ย (ma_ratio) สูงกว่าคือ Bull, ต่ำกว่าคือ Bear
         remaining_indices = [i for i in range(3) if i != sideway_idx]
         if stats.loc[remaining_indices[0], 'ma_ratio'] > stats.loc[remaining_indices[1], 'ma_ratio']:
             bull_idx, bear_idx = remaining_indices[0], remaining_indices[1]
